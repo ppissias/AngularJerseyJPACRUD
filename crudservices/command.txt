@@ -1,0 +1,6 @@
+gradlew distZip 
+then go to build/distri ... unzip and run from bin 
+
+http://localhost:8080/myapp/myresource
+http://localhost:8080/myapp/expenseresource 
+

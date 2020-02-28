@@ -1,0 +1,8 @@
+/.gradle/
+/expensesdata
+/build
+/bin
+/.settings
+.classpath
+.project 
+*.log 
