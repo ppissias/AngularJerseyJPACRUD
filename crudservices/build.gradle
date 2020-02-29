@@ -20,8 +20,10 @@ repositories {
 dependencies {
     implementation 'org.glassfish.jersey.containers:jersey-container-grizzly2-http:2.30'
     implementation 'org.glassfish.jersey.inject:jersey-hk2:2.30'
-    implementation 'org.glassfish.jersey.media:jersey-media-moxy:2.30'    
+    implementation 'org.glassfish.jersey.media:jersey-media-moxy:2.30'   
+    implementation 'org.glassfish.jersey.media:jersey-media-multipart:2.30'   
     implementation 'org.eclipse.persistence:eclipselink:2.7.6'
+    implementation 'org.glassfish.jaxb:jaxb-runtime:2.3.1'
     implementation 'org.apache.derby:derby:10.14.2.0'
     testImplementation 'junit:junit:4.12'
 }

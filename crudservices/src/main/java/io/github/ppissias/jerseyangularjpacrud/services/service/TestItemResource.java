@@ -16,6 +16,13 @@ import javax.ws.rs.core.Response;
 
 import io.github.ppissias.jerseyangularjpacrud.services.Main;
 import io.github.ppissias.jerseyangularjpacrud.services.model.TestItem;
+import java.io.InputStream;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.POST;
+
+import org.glassfish.jersey.media.multipart.FormDataBodyPart;
+import org.glassfish.jersey.media.multipart.FormDataParam;
+import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 
 /**
  * Root resource (exposed at "myresource" path)
@@ -91,6 +98,7 @@ public class TestItemResource {
     
     @PUT
     @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
     public List<TestItem> updateTestItem(TestItem testItem) {
         EntityManager em = Main.getEntityManagerFactory().createEntityManager();
         if (testItem.getId() != null) {
@@ -111,4 +119,41 @@ public class TestItemResource {
         
         return getItems();
     }    
+    
+    @POST
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    public List<TestItem> addTestItem(TestItem testItem) {
+        EntityManager em = Main.getEntityManagerFactory().createEntityManager();
+      	em.getTransaction().begin();
+       	em.persist(testItem);
+       	em.getTransaction().commit();
+        em.close();
+        
+        return getItems();
+    } 
+    
+
+    @POST
+	@Path("v1/fileUpload")
+	@Consumes(MediaType.MULTIPART_FORM_DATA)
+	@Produces({MediaType.APPLICATION_JSON})
+	public Response createFile(@FormDataParam("fileEmp") FormDataBodyPart jsonPart,
+            @FormDataParam("file") FormDataBodyPart bodyPart) {
+            return null;
+        }
+        
+@POST
+	@Path("/imageupload")
+	@Consumes(MediaType.MULTIPART_FORM_DATA)
+	@Produces(MediaType.APPLICATION_JSON)
+    public Response uploadImage(@FormDataParam("file") InputStream uploadedInputStream,
+									@FormDataParam("file") FormDataContentDisposition fileDetails) {
+
+		System.out.println("\n\n..CandidateServlet.uploadImage()");
+		System.out.println(fileDetails.getFileName());
+
+		return Response.ok("File uploaded = " + fileDetails.getFileName()).build();
+	}
+        
 }
