@@ -11,6 +11,7 @@ import { UpdateitemComponent } from './updateitem/updateitem.component';
 import { HttpClientModule }    from '@angular/common/http';
 
 import { RouterModule, Routes } from '@angular/router';
+import { FormsModule } from '@angular/forms';
 
 import { MatSliderModule } from '@angular/material/slider';
 import {MatGridListModule} from '@angular/material/grid-list'; 
@@ -36,6 +37,7 @@ import {MatTableModule} from '@angular/material/table';
     MatButtonModule,
     MatTableModule,
     HttpClientModule,
+    FormsModule,
     RouterModule.forRoot([      
       { path: '', component: DisplayitemlistComponent },
       { path: 'updateitem/:itemid', component: UpdateitemComponent },

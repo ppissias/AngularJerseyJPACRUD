@@ -133,27 +133,28 @@ public class TestItemResource {
         return getItems();
     } 
     
+    /*
 
     @POST
-	@Path("v1/fileUpload")
-	@Consumes(MediaType.MULTIPART_FORM_DATA)
-	@Produces({MediaType.APPLICATION_JSON})
-	public Response createFile(@FormDataParam("fileEmp") FormDataBodyPart jsonPart,
-            @FormDataParam("file") FormDataBodyPart bodyPart) {
-            return null;
-        }
+    @Path("v1/fileUpload")
+    @Consumes(MediaType.MULTIPART_FORM_DATA)
+    @Produces({MediaType.APPLICATION_JSON})
+    public Response createFile(@FormDataParam("fileEmp") FormDataBodyPart jsonPart,
+        @FormDataParam("file") FormDataBodyPart bodyPart) {
+        return null;
+    }
         
-@POST
-	@Path("/imageupload")
-	@Consumes(MediaType.MULTIPART_FORM_DATA)
-	@Produces(MediaType.APPLICATION_JSON)
+    @POST
+    @Path("/imageupload")
+    @Consumes(MediaType.MULTIPART_FORM_DATA)
+    @Produces(MediaType.APPLICATION_JSON)
     public Response uploadImage(@FormDataParam("file") InputStream uploadedInputStream,
 									@FormDataParam("file") FormDataContentDisposition fileDetails) {
 
-		System.out.println("\n\n..CandidateServlet.uploadImage()");
-		System.out.println(fileDetails.getFileName());
+	System.out.println("\n\n..CandidateServlet.uploadImage()");
+	System.out.println(fileDetails.getFileName());
 
-		return Response.ok("File uploaded = " + fileDetails.getFileName()).build();
-	}
-        
+	return Response.ok("File uploaded = " + fileDetails.getFileName()).build();
+    }
+      */  
 }
