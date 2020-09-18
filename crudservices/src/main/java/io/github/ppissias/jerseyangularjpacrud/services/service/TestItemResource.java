@@ -19,11 +19,11 @@ import io.github.ppissias.jerseyangularjpacrud.services.model.TestItem;
 import java.io.InputStream;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
-
+/*
 import org.glassfish.jersey.media.multipart.FormDataBodyPart;
 import org.glassfish.jersey.media.multipart.FormDataParam;
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
-
+*/
 /**
  * Root resource (exposed at "myresource" path)
  */

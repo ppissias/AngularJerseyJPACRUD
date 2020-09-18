@@ -7,12 +7,12 @@ import { Router } from '@angular/router';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title = 'gui';
+  title = 'guis';
 
   constructor(private router: Router) { }
 
   addItem() {
     console.log("adding new item");
-    this.router.navigateByUrl("/createitem");
+    this.router.navigateByUrl("/createitem"); /* router is defined in main app module */
   }  
 }
