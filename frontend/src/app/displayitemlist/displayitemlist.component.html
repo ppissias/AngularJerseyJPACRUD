@@ -1,0 +1,60 @@
+<p>displayitemlist works!</p>
+
+<button mat-raised-button (click)="getItems()" color="primary">Get Items</button>
+
+<table mat-table [dataSource]="testItems" class="mat-elevation-z8">
+
+    <!--- Note that these columns can be defined in any order.
+          The actual rendered columns are set as a property on the row definition" -->
+  
+
+    <!-- id Column -->
+    <ng-container matColumnDef="id">
+      <th mat-header-cell *matHeaderCellDef> id </th>
+      <td mat-cell *matCellDef="let element"> {{element.id}} </td>
+    </ng-container>
+  
+    <!-- amount Column -->
+    <ng-container matColumnDef="amount">
+      <th mat-header-cell *matHeaderCellDef> amount </th>
+      <td mat-cell *matCellDef="let element"> {{element.amount}} </td>
+    </ng-container>
+  
+    <!-- descrpition Column -->
+    <ng-container matColumnDef="descrpition">
+      <th mat-header-cell *matHeaderCellDef> descrpition </th>
+      <td mat-cell *matCellDef="let element"> {{element.descrpition}} </td>
+    </ng-container>
+  
+    <!-- detailedDescription Column -->
+    <ng-container matColumnDef="detailedDescription">
+        <th mat-header-cell *matHeaderCellDef> detailedDescription </th>
+        <td mat-cell *matCellDef="let element"> {{element.detailedDescription}} </td>
+      </ng-container>
+    
+      <!-- transactionDate Column -->
+      <ng-container matColumnDef="transactionDate">
+        <th mat-header-cell *matHeaderCellDef> transactionDate </th>
+        <td mat-cell *matCellDef="let element"> {{element.transactionDate}} </td>
+      </ng-container>
+    
+      <!-- Weight category -->
+      <ng-container matColumnDef="category">
+        <th mat-header-cell *matHeaderCellDef> category </th>
+        <td mat-cell *matCellDef="let element"> {{element.category}} </td>
+      </ng-container>
+      
+      <!-- Weight category -->
+      <ng-container matColumnDef="action">
+        <th mat-header-cell *matHeaderCellDef> action </th>
+        <td mat-cell *matCellDef="let element"> <button mat-raised-button (click)="deleteItem(element.id)" color="warn">Delete</button> 
+          <button mat-raised-button (click)="updateItem(element.id)" color="primary">Update</button> 
+          <button mat-raised-button (click)="navigateUpdate(element.id)" color="primary">Update2</button> 
+          <button mat-raised-button (click)="getItem(element.id)" color="primary">Get</button> 
+          </td>
+      </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+  
