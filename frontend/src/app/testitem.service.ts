@@ -29,9 +29,6 @@ export class TestitemService {
   deleteTestItem(id: Number) : Observable<TestItem[]> {
     console.log("service wlll delete id!"+id);
     try {
-      // synchronous operation
-      //const ret = this.http.delete(this.serviceURL+"/"+id);
-      //const ret = this.http.delete(this.serviceURL+"/"+id);
       return this.http.delete<TestItem[]>(this.serviceURL+"/"+id);
     }
    catch(error) {
@@ -42,11 +39,13 @@ export class TestitemService {
   }
 
   addTestItem(item: TestItem) {
-
+    console.log("adding test item "+item);
+    return  this.http.post<TestItem[]>(this.serviceURL, item);    
   }
 
-  updateItem(id:Number, item: TestItem) : void {
-    
+  updateItem(item: TestItem)  {
+    console.log("update test item "+item);
+    return  this.http.put<TestItem[]>(this.serviceURL, item);    
   }
 
  

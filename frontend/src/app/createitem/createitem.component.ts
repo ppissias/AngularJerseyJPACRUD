@@ -17,20 +17,23 @@ export class CreateitemComponent implements OnInit {
     public testItemService: TestitemService
   ) { }
 
+  testItems: TestItem[];
+
   testItem: TestItem = {
     id: 0,
-    transactionDate: "",
     descrpition: "",
-    detailedDescription: "",
-    amount: 0, 
-    category: ""
   }
 
   ngOnInit() {
   }
 
   onSubmit() {
-    console.log("test Item "+this.testItem.transactionDate);
-   
+    console.log("test Item "+this.testItem.descrpition);
+    
+    //get Testitem and send it to the URL
+    this.testItemService.addTestItem(this.testItem).subscribe(
+      testItems => this.testItems = testItems
+    ); 
+    this.router.navigateByUrl("/");
   }
 }
