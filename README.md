@@ -5,12 +5,17 @@ The Java backend is implemented with Jersey (REST provider) and JPA (using Derby
 The Angular frontend uses the Angular Material components.
 
 ## Running / compiling the Java part
+You need to have Java 11 installed (although I think it can probably run in Java 8 as well)
 ```
+cd crudservices
 gradlew distZip ==>builds independent java backend services.zip file in builds/distributions 
 ```
 
 ## Running the angular web gui 
+You need to have an Angular development environment as described here
+https://angular.io/guide/setup-local
 ```
+cd frontend
 ng serve
 ```
 ## Using the browser to access the application
