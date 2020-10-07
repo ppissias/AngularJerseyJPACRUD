@@ -1,5 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 
+import {TestItem} from '../testitem';
+import {TestitemService} from '../testitem.service';
+
+import { Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
+
 @Component({
   selector: 'app-updateitem',
   templateUrl: './updateitem.component.html',
@@ -7,9 +13,39 @@ import { Component, OnInit } from '@angular/core';
 })
 export class UpdateitemComponent implements OnInit {
 
-  constructor() { }
+  constructor(
+    private router: Router,
+    public testItemService: TestitemService,
+    private route: ActivatedRoute
+  ) { }
 
-  ngOnInit() {
+  id : Number;
+
+  testItems: TestItem[];
+
+  testItem: TestItem = {
+    id: 0,
+    descrpition: "",
   }
 
+  ngOnInit() {
+    console.log("init");
+    this.route.params.subscribe(params => {
+      console.log("will get with id "+params['itemid']);
+      this.id = +params['itemid']; // (+) converts string 'id' to a number
+      this.testItemService.getTestItem(this.id).subscribe(
+        testItem => {this.testItem = testItem; console.log("updated test item");}
+      );
+    });
+  }
+
+  onSubmit() {
+    console.log("test Item "+this.testItem.descrpition);
+    
+    //get Testitem and send it to the URL
+    this.testItemService.updateItem(this.testItem).subscribe(
+      testItems => this.testItems = testItems
+    ); 
+    this.router.navigateByUrl("/");
+  }
 }

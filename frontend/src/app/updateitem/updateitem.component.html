@@ -1,1 +1,9 @@
-<p>updateitem works!</p>
+<p>Update Testitem</p>
+<form (ngSubmit)="onSubmit()">
+  <div class="form-group">
+    <label for="name">descrpition</label>
+    <input type="text" class="form-control" id="descrpition" required [(ngModel)]="testItem.descrpition" name="descrpition">
+  </div>
+
+  <button type="submit" class="btn btn-success">Submit</button>
+</form>

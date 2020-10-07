@@ -19,10 +19,11 @@ export class DisplayitemlistComponent implements OnInit {
   testItems: TestItem[]; 
   testItem: TestItem;
 
-  displayedColumns: string[] = ['id', 'amount', 'descrpition', 'detailedDescription','transactionDate','category','action'];
+  displayedColumns: string[] = ['id', 'descrpition', 'action'];
  
   ngOnInit() {
     console.log("initiated");
+    this.getTestItems();
   }
 
   getTestItems(): void {

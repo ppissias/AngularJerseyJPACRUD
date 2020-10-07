@@ -124,6 +124,8 @@ public class TestItemResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     public List<TestItem> addTestItem(TestItem testItem) {
+        Main.logger.log(Level.INFO,"will add testItem "+testItem);
+    	
         EntityManager em = Main.getEntityManagerFactory().createEntityManager();
       	em.getTransaction().begin();
        	em.persist(testItem);

@@ -39,7 +39,7 @@ import {MatTableModule} from '@angular/material/table';
     HttpClientModule,
     FormsModule,
     RouterModule.forRoot([      
-      { path: '', component: DisplayitemlistComponent }, /* will append after bootstrap component */
+      { path: '', component: DisplayitemlistComponent }, //root path
       { path: 'updateitem/:itemid', component: UpdateitemComponent },
       { path: 'createitem', component: CreateitemComponent },
     ])        

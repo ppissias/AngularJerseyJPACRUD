@@ -93,6 +93,7 @@ public class Main {
         performJPAAction();
         Main.logger.log(Level.FINE,String.format("Jersey app started with WADL available at "
                 + "%sapplication.wadl\nHit enter to stop it...", BASE_URI));
+        
         System.in.read();
         server.stop();
     }
