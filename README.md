@@ -8,6 +8,7 @@ The Angular frontend uses the Angular Material components.
 You need to have Java 11 installed (although I think it can probably run in Java 8 as well)
 ```
 cd crudservices
+gradlew run ==> this will run the server
 gradlew distZip ==>builds independent java backend services.zip file in builds/distributions 
 ```
 
