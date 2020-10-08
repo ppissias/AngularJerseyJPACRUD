@@ -18,6 +18,12 @@ https://angular.io/guide/setup-local
 cd frontend
 ng serve
 ```
+You might first need to do an update by executing the commands below
+```
+npm install
+ng update
+npm update
+```
 ## Using the browser to access the application
 At this develpoment state, 
 you need to run the browser using the "NOCORS" mode, for example ein windows
