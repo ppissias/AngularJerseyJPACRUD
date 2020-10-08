@@ -1,81 +1,98 @@
 package io.github.ppissias.jerseyangularjpacrud.services.service;
 
 import java.util.List;
-import java.util.logging.Level;
 
 import javax.persistence.EntityManager;
-import javax.persistence.Query;
+import javax.persistence.TypedQuery;
+import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 
 import io.github.ppissias.jerseyangularjpacrud.services.Main;
 import io.github.ppissias.jerseyangularjpacrud.services.model.TestItem;
-import java.io.InputStream;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.POST;
-/*
-import org.glassfish.jersey.media.multipart.FormDataBodyPart;
-import org.glassfish.jersey.media.multipart.FormDataParam;
-import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
-*/
+
 /**
- * Root resource (exposed at "myresource" path)
+ * This is the main resource that is exposed via the interfaces below
+ * 
+ * @author Petros Pissias
+ *
  */
 @Path("testitem")
 public class TestItemResource {
 
-    /**
-     * Method handling HTTP GET JSON requests.     *
-     * @return String that will be returned as a JSON response.
-     */
+
+	/**
+	 * the GET request returns the list of items "/"
+	 * @return
+	 */
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public List<TestItem> getItems() {
-        Main.logger.log(Level.FINE,"Received REST GET request for test items new");
+        Main.logger.info("Received REST GET request for test items");
 
-        EntityManager em = Main.getEntityManagerFactory().createEntityManager();
-
-        Query q = em.createQuery("select t from TestItem t");
+        EntityManager em = Main.getEntityManager();
+        TypedQuery<TestItem> q = em.createQuery("select t from TestItem t",TestItem.class);
         List<TestItem> expenseList = q.getResultList();
+        StringBuffer sb = new StringBuffer();
         for (TestItem expense : expenseList) {
-            Main.logger.log(Level.FINE,expense.toString());
+        	sb.append(expense+"\n");
         }       
+        Main.logger.info("items:\n"+sb.toString());
         em.close();
         
         return expenseList;
     }
     
+    /**
+     * Get the details of a single item "/id"
+     * @param id
+     * @return the list of items
+     */
     @GET
     @Path("{id}")    
     @Produces(MediaType.APPLICATION_JSON)
     public TestItem getItem(@PathParam("id") int id) {
-        Main.logger.log(Level.FINE,"Received REST GET request for test item "+id);
-
-        EntityManager em = Main.getEntityManagerFactory().createEntityManager();
-
-        Query q = em.createQuery("select t from TestItem t where t.id="+id);
-        List<TestItem> expenseList = q.getResultList();
-        for (TestItem expense : expenseList) {
-            Main.logger.log(Level.FINE,expense.toString());
-        }       
-        em.close();
+    	Main.logger.info("will return test item with id:"+id);
         
-        return expenseList.get(0);
+        //create new entity manager
+        EntityManager em = Main.getEntityManager();
+        
+        TypedQuery<TestItem> q = em.createQuery("select t from TestItem t where t.id="+id, TestItem.class);        
+        List<TestItem> itemList = q.getResultList();
+        TestItem testItem;
+        if (itemList.size() == 0) {
+            testItem = new TestItem("");
+            em.close();    
+            Main.logger.warning("Test item with id:"+id+" does not exist");
+            return testItem;        	
+        } else {
+            testItem = itemList.get(0);     
+            em.close();    
+            Main.logger.info("Item:"+testItem);                   
+            return testItem;
+        }
+
     }
     
+    /**
+     * Deletes an item with the specified id
+     * @param id
+     * @return the new list of items
+     */
     @DELETE
     @Path("{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public List<TestItem> deleteItem(@PathParam("id") int id) {
-        Main.logger.log(Level.INFO,"deleting id"+id);
+    	Main.logger.info("will delete test item with id:"+id);
 
-        EntityManager em = Main.getEntityManagerFactory().createEntityManager();
+        //create new entity manager
+        EntityManager em = Main.getEntityManager();
 
     	TestItem ti = em.find(TestItem.class, id);
     	if (ti != null) {
@@ -83,50 +100,53 @@ public class TestItemResource {
 	    	em.remove(ti);
 	    	em.getTransaction().commit();
     	}
+    	em.close();
     	
-        Query q = em.createQuery("select t from TestItem t");
-        List<TestItem> expenseList = q.getResultList();
-        for (TestItem expense : expenseList) {
-            Main.logger.log(Level.FINE,expense.toString());
-        }       
-        em.close();
-        
         return getItems();
     }
     
-
-    
+    /**
+     * Updates an item
+     * @param testItem
+     * @return the new list of items
+     */
     @PUT
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public List<TestItem> updateTestItem(TestItem testItem) {
-        EntityManager em = Main.getEntityManagerFactory().createEntityManager();
+    public void updateTestItem(TestItem testItem) {
+    	Main.logger.info("will update test item:"+testItem);
+    	//create new entity manager instance
+        EntityManager em = Main.getEntityManager();
+        
         if (testItem.getId() != null) {
         	TestItem expenseToUpdate = em.find(TestItem.class, testItem.getId());
-        	em.getTransaction().begin();
-        	
-        	expenseToUpdate.setAmount(testItem.getAmount());
-        	expenseToUpdate.setCategory(testItem.getCategory());
-        	expenseToUpdate.setDescrpition(testItem.getDescrpition());
-        	expenseToUpdate.setDetailedDescription(testItem.getDetailedDescription());
-        	expenseToUpdate.setTransactionDate(testItem.getTransactionDate());
-        	
-        	em.getTransaction().commit();
+        	if (expenseToUpdate != null) {
+	        	em.getTransaction().begin();
+	        	expenseToUpdate.setDescrpition(testItem.getDescrpition());        
+	        	em.getTransaction().commit();
+        	} else {
+        		 Main.logger.warning("Received update for expense:"+testItem+" which is not in the database");
+        	}
         } else {
-        	Main.logger.log(Level.WARNING, "Received update for expense:"+testItem+" but could not find itin the database");
+        	 Main.logger.warning("Received update for expense:"+testItem+" with null id");
         }       
         em.close();
         
-        return getItems();
+        //return getItems();
     }    
     
+    /**
+     * Used to insert a new item
+     * @param testItem
+     * @return the new list of items
+     */
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     public List<TestItem> addTestItem(TestItem testItem) {
-        Main.logger.log(Level.INFO,"will add testItem "+testItem);
+        Main.logger.info("will add testItem "+testItem);
     	
-        EntityManager em = Main.getEntityManagerFactory().createEntityManager();
+        EntityManager em = Main.getEntityManager();
       	em.getTransaction().begin();
        	em.persist(testItem);
        	em.getTransaction().commit();
@@ -135,28 +155,5 @@ public class TestItemResource {
         return getItems();
     } 
     
-    /*
 
-    @POST
-    @Path("v1/fileUpload")
-    @Consumes(MediaType.MULTIPART_FORM_DATA)
-    @Produces({MediaType.APPLICATION_JSON})
-    public Response createFile(@FormDataParam("fileEmp") FormDataBodyPart jsonPart,
-        @FormDataParam("file") FormDataBodyPart bodyPart) {
-        return null;
-    }
-        
-    @POST
-    @Path("/imageupload")
-    @Consumes(MediaType.MULTIPART_FORM_DATA)
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response uploadImage(@FormDataParam("file") InputStream uploadedInputStream,
-									@FormDataParam("file") FormDataContentDisposition fileDetails) {
-
-	System.out.println("\n\n..CandidateServlet.uploadImage()");
-	System.out.println(fileDetails.getFileName());
-
-	return Response.ok("File uploaded = " + fileDetails.getFileName()).build();
-    }
-      */  
 }

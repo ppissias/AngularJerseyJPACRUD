@@ -1,27 +1,26 @@
 package io.github.ppissias.jerseyangularjpacrud.services;
 
+import java.io.IOException;
+import java.net.URI;
+import java.util.List;
+import java.util.Random;
+import java.util.logging.Logger;
+
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
+import javax.persistence.TypedQuery;
+
 import org.glassfish.grizzly.http.server.HttpServer;
 import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
 import org.glassfish.jersey.server.ResourceConfig;
 
 import io.github.ppissias.jerseyangularjpacrud.services.model.TestItem;
 
-import java.io.IOException;
-import java.net.URI;
-import java.util.Date;
-import java.util.List;
-import java.util.logging.ConsoleHandler;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import java.util.logging.SimpleFormatter;
-
-import javax.persistence.Query;
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
 
 /**
- * Main class.
+ * Main class that starts the embedded HTTP server
+ * @author Petros Pissias
  *
  */
 public class Main { 
@@ -32,11 +31,13 @@ public class Main {
     private static final String PERSISTENCE_UNIT_NAME = "testitem";
     
     //JPA stuff
-    private static EntityManagerFactory factory;       
-    public static EntityManagerFactory getEntityManagerFactory() {
-    	return factory;
+    public static final EntityManagerFactory factory = Persistence.createEntityManagerFactory(PERSISTENCE_UNIT_NAME);
+    
+    public static EntityManager getEntityManager() {
+    	return factory.createEntityManager();
     }
     
+    //logger
     public static final Logger logger = Logger.getLogger("services");
     
     /**
@@ -46,56 +47,48 @@ public class Main {
     public static HttpServer startServer() {
         // create a resource config that scans for JAX-RS resources and providers
         final ResourceConfig rc = new ResourceConfig().packages("io.github.ppissias.jerseyangularjpacrud.services.service");
-
-        //create JPA factory
-        factory = Persistence.createEntityManagerFactory(PERSISTENCE_UNIT_NAME);
         
         // create and start a new instance of grizzly http server
         // exposing the Jersey application at BASE_URI
         return GrizzlyHttpServerFactory.createHttpServer(URI.create(BASE_URI), rc);
     }
 
-    public static void performJPAAction() {
-        EntityManager em = getEntityManagerFactory().createEntityManager();
+    /**
+     * Inserts lists records and inserts a test record
+     */
+    public static void testJPA() {
         // read the existing entries and write to console
-        Query q = em.createQuery("select t from TestItem t");
+    	EntityManager em = Main.getEntityManager();
+        TypedQuery<TestItem> q = em.createQuery("select t from TestItem t",TestItem.class);
         List<TestItem> expenseList = q.getResultList();
         for (TestItem expense : expenseList) {
-            Main.logger.log(Level.FINE,expense.toString());
+            Main.logger.info(expense.toString());
         }
-        Main.logger.log(Level.FINE,"Size: " + expenseList.size());
+        Main.logger.info("Size: " + expenseList.size());
 
-        //insert one
+        //insert one item
     	em.getTransaction().begin();
-    	em.persist(new TestItem(new Date().toString(),"description","detailed description", 100.1234, "category"));
+    	em.persist(new TestItem("This is a random number:"+new Random().nextInt()));
         em.getTransaction().commit();
-
         em.close();    	
     }
     
+
     /**
-     * Main method.
+     * Main method that starts the application
      * @param args
      * @throws IOException
+     * @throws InterruptedException 
      */
-    public static void main(String[] args) throws IOException {
-        
-    	final ConsoleHandler consoleHandler = new ConsoleHandler();
-        consoleHandler.setLevel(Level.FINEST);
-        consoleHandler.setFormatter(new SimpleFormatter());
-
-        logger.setLevel(Level.FINEST);
-        logger.addHandler(consoleHandler);
+    public static void main(String[] args) throws IOException, InterruptedException {
         
     	final HttpServer server = startServer();
         
-        Main.logger.log(Level.FINE,"performing JPA action");
-        performJPAAction();
-        Main.logger.log(Level.FINE,String.format("Jersey app started with WADL available at "
-                + "%sapplication.wadl\nHit enter to stop it...", BASE_URI));
+    	Main.logger.info("performing test JPA action");
+        testJPA();
         
-        System.in.read();
-        server.stop();
+        Main.logger.info("Jersey app started with WADL available at "+BASE_URI);
+       
     }
 }
 

@@ -45,7 +45,7 @@ export class TestitemService {
 
   updateItem(item: TestItem)  {
     console.log("update test item "+item);
-    return  this.http.put<TestItem[]>(this.serviceURL, item);    
+    return  this.http.put<void>(this.serviceURL, item);    
   }
 
  

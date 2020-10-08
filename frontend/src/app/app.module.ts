@@ -18,7 +18,9 @@ import {MatGridListModule} from '@angular/material/grid-list';
 import {MatTabsModule} from '@angular/material/tabs'; 
 import {MatButtonModule} from '@angular/material/button';
 import {MatTableModule} from '@angular/material/table'; 
-
+import {MatInputModule} from '@angular/material/input';
+import {MatFormFieldModule} from '@angular/material/form-field';
+import {MatIconModule} from '@angular/material/icon';
 
 @NgModule({
   declarations: [
@@ -36,7 +38,10 @@ import {MatTableModule} from '@angular/material/table';
     MatTabsModule,
     MatButtonModule,
     MatTableModule,
+    MatInputModule,
     HttpClientModule,
+    MatFormFieldModule,
+    MatIconModule,
     FormsModule,
     RouterModule.forRoot([      
       { path: '', component: DisplayitemlistComponent }, //root path

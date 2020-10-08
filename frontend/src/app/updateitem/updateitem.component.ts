@@ -21,8 +21,6 @@ export class UpdateitemComponent implements OnInit {
 
   id : Number;
 
-  testItems: TestItem[];
-
   testItem: TestItem = {
     id: 0,
     descrpition: "",
@@ -41,11 +39,8 @@ export class UpdateitemComponent implements OnInit {
 
   onSubmit() {
     console.log("test Item "+this.testItem.descrpition);
-    
-    //get Testitem and send it to the URL
-    this.testItemService.updateItem(this.testItem).subscribe(
-      testItems => this.testItems = testItems
-    ); 
+
+    this.testItemService.updateItem(this.testItem).subscribe();
     this.router.navigateByUrl("/");
   }
 }
