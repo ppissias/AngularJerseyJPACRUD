@@ -25,8 +25,6 @@ import io.github.ppissias.jerseyangularjpacrud.services.model.TestItem;
  */
 @Path("testitem")
 public class TestItemResource {
-
-
 	/**
 	 * the GET request returns the list of items "/"
 	 * @return
@@ -38,15 +36,15 @@ public class TestItemResource {
 
         EntityManager em = Main.getEntityManager();
         TypedQuery<TestItem> q = em.createQuery("select t from TestItem t",TestItem.class);
-        List<TestItem> expenseList = q.getResultList();
+        List<TestItem> itemList = q.getResultList();
         StringBuffer sb = new StringBuffer();
-        for (TestItem expense : expenseList) {
-        	sb.append(expense+"\n");
+        for (TestItem item : itemList) {
+        	sb.append(item+"\n");
         }       
         Main.logger.info("items:\n"+sb.toString());
         em.close();
         
-        return expenseList;
+        return itemList;
     }
     
     /**
