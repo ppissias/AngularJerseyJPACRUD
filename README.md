@@ -4,6 +4,7 @@ This is a simple "CRUD" (Create Read Update Delete) example with very simple dat
 The Java backend is implemented with Jersey (REST provider) and JPA (using Derby as the underlying database).
 The Angular frontend uses the Angular Material components.
 
+
 ## Running / compiling the Java part
 You need to have Java 11 installed (although I think it can probably run in Java 8 as well)
 ```
